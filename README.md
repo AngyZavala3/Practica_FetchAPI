@@ -1,19 +1,28 @@
-# Practica_FetchAPI
-Objetivo
-Aprender a realizar llamadas HTTP desde el navegador hacia una API REST utilizando fetch() en JavaScript.
+# Práctica: Conectando Frontend con una API usando Fetch
 
-Requisitos Previos
-Saber crear una API con Express (endpoints GET y POST, leer/escribir archivos con fs)
-Conocimientos básicos de HTML y JavaScript
-Parte 1: La API (Proporcionada)
-Crea una carpeta llamada ContactosApi y dentro crea los siguientes archivos:
+## Objetivo
+Aprender a realizar llamadas HTTP desde el navegador hacia una API REST utilizando `fetch()` en JavaScript.
 
-db.json
+## Requisitos Previos
+- Saber crear una API con Express (endpoints GET y POST, leer/escribir archivos con `fs`)
+- Conocimientos básicos de HTML y JavaScript
+
+---
+
+## Parte 1: La API (Proporcionada)
+
+Crea una carpeta llamada `ContactosApi` y dentro crea los siguientes archivos:
+
+### `db.json`
+```json
 [
   { "id": 1, "nombre": "Ana López", "telefono": "555-1234" },
   { "id": 2, "nombre": "Carlos Ruiz", "telefono": "555-5678" }
 ]
-index.js
+```
+
+### `index.js`
+```javascript
 const express = require("express");
 const fs = require("fs");
 
@@ -65,13 +74,19 @@ app.delete("/contactos/:id", (req, res) => {
 app.listen(3000, () => {
     console.log("API corriendo en http://localhost:3000");
 });
-Ejecuta npm init -y, luego npm install express, y finalmente node --watch index.js.
+```
 
-Verifica que funcione: Abre tu navegador y ve a http://localhost:3000/contactos. Deberías ver los contactos en formato JSON.
+Ejecuta `npm init -y`, luego `npm install express`, y finalmente `node --watch index.js`.
 
-Parte 2: El Frontend
-Crea una carpeta separada llamada ContactosApp y dentro crea el archivo index.html:
+> **Verifica que funcione:** Abre tu navegador y ve a `http://localhost:3000/contactos`. Deberías ver los contactos en formato JSON.
 
+---
+
+## Parte 2: El Frontend
+
+Crea una carpeta separada llamada `ContactosApp` y dentro crea el archivo `index.html`:
+
+```html
 <!doctype html>
 <html lang="es">
 <head>
@@ -122,28 +137,37 @@ Crea una carpeta separada llamada ContactosApp y dentro crea el archivo index.ht
     <script src="app.js"></script>
 </body>
 </html>
-Parte 3: Ejercicios (app.js)
-Crea el archivo app.js en la misma carpeta. Completa los siguientes ejercicios en orden.
+```
 
-Ejercicio 1: Obtener y mostrar contactos (GET)
-fetch() es una función del navegador que permite hacer peticiones HTTP. Devuelve una Promesa que se resuelve cuando el servidor responde.
+---
 
-Sintaxis básica:
+## Parte 3: Ejercicios (app.js)
 
+Crea el archivo `app.js` en la misma carpeta. Completa los siguientes ejercicios en orden.
+
+### Ejercicio 1: Obtener y mostrar contactos (GET)
+
+`fetch()` es una función del navegador que permite hacer peticiones HTTP. Devuelve una **Promesa** que se resuelve cuando el servidor responde.
+
+**Sintaxis básica:**
+```javascript
 fetch("http://localhost:3000/contactos")
     .then((response) => response.json())  // Convertir la respuesta a JSON
     .then((data) => {
         // Aquí ya tienes los datos del servidor
         console.log(data);
     });
-⚠️ Importante: fetch() es asíncrono. El código después de fetch() se ejecuta ANTES de que llegue la respuesta. Por eso todo lo que dependa de los datos debe ir dentro del .then().
+```
 
-Tu tarea: Escribe una función mostrarContactos() que:
+> ⚠️ **Importante:** `fetch()` es **asíncrono**. El código después de `fetch()` se ejecuta ANTES de que llegue la respuesta. Por eso todo lo que dependa de los datos debe ir **dentro** del `.then()`.
 
-Haga un fetch GET a http://localhost:3000/contactos
-Dentro del .then(), recorra el arreglo de contactos (data.data)
-Por cada contacto, cree un <tr> con sus datos y lo agregue al <tbody id="tablaContactos">
-Llama a mostrarContactos() al inicio del archivo para que cargue al abrir la página
+**Tu tarea:** Escribe una función `mostrarContactos()` que:
+1. Haga un `fetch` GET a `http://localhost:3000/contactos`
+2. Dentro del `.then()`, recorra el arreglo de contactos (`data.data`)
+3. Por cada contacto, cree un `<tr>` con sus datos y lo agregue al `<tbody id="tablaContactos">`
+4. Llama a `mostrarContactos()` al inicio del archivo para que cargue al abrir la página
+
+```javascript
 // Escribe tu código aquí:
 
 function mostrarContactos() {
@@ -157,9 +181,15 @@ function mostrarContactos() {
 }
 
 mostrarContactos();
-Ejercicio 2: Crear un nuevo contacto (POST)
-Para enviar datos al servidor usamos fetch() con opciones adicionales:
+```
 
+---
+
+### Ejercicio 2: Crear un nuevo contacto (POST)
+
+Para enviar datos al servidor usamos `fetch()` con opciones adicionales:
+
+```javascript
 fetch("http://localhost:3000/contactos", {
     method: "POST",                              // Método HTTP
     headers: {
@@ -167,12 +197,15 @@ fetch("http://localhost:3000/contactos", {
     },
     body: JSON.stringify({ nombre: "...", telefono: "..." })  // Los datos
 });
-Tu tarea: Agrega un evento submit al formulario que:
+```
 
-Prevenga el comportamiento por defecto con e.preventDefault()
-Obtenga los valores de los campos nombre y telefono
-Haga un fetch POST enviando los datos como JSON
-Después de que el POST termine (.then()), llame a mostrarContactos() para actualizar la tabla
+**Tu tarea:** Agrega un evento `submit` al formulario que:
+1. Prevenga el comportamiento por defecto con `e.preventDefault()`
+2. Obtenga los valores de los campos `nombre` y `telefono`
+3. Haga un `fetch` POST enviando los datos como JSON
+4. Después de que el POST termine (`.then()`), llame a `mostrarContactos()` para actualizar la tabla
+
+```javascript
 // Escribe tu código aquí:
 
 const form = document.getElementById("contactForm");
@@ -182,21 +215,30 @@ form.addEventListener("submit", (e) => {
     // 3. Haz fetch POST con los datos
     // 4. En el .then(), llama a mostrarContactos() para refrescar la tabla
 });
-Ejercicio 3: Eliminar un contacto (DELETE)
-Para eliminar un recurso del servidor usamos fetch() con el método DELETE. Nota que la URL incluye el ID del elemento a eliminar:
+```
 
+---
+
+### Ejercicio 3: Eliminar un contacto (DELETE)
+
+Para eliminar un recurso del servidor usamos `fetch()` con el método `DELETE`. Nota que la URL incluye el **ID** del elemento a eliminar:
+
+```javascript
 fetch(`http://localhost:3000/contactos/${id}`, {
     method: "DELETE",
     headers: {
         "Content-Type": "application/json",
     },
 });
-Tu tarea:
+```
 
-Modifica la función mostrarContactos() para que cada fila de la tabla tenga un botón "Eliminar" en una columna de Acciones
-Agrega un addEventListener("click") al botón que llame a una función eliminarContacto(id)
-Escribe la función eliminarContacto(id) que haga un fetch DELETE al servidor
-Después de eliminar, llama a mostrarContactos() para refrescar la tabla
+**Tu tarea:**
+1. Modifica la función `mostrarContactos()` para que cada fila de la tabla tenga un botón "Eliminar" en una columna de Acciones
+2. Agrega un `addEventListener("click")` al botón que llame a una función `eliminarContacto(id)`
+3. Escribe la función `eliminarContacto(id)` que haga un `fetch` DELETE al servidor
+4. Después de eliminar, llama a `mostrarContactos()` para refrescar la tabla
+
+```javascript
 // Dentro de mostrarContactos(), modifica el innerHTML del <tr> para agregar:
 //     <td>
 //         <button class="btn btn-sm btn-danger delete-btn">Eliminar</button>
@@ -214,27 +256,40 @@ function eliminarContacto(id) {
     // 2. En el .then(), muestra un alert con el mensaje del servidor
     // 3. Llama a mostrarContactos() para refrescar la tabla
 }
-Ejercicio 4: Verificación
+```
+
+---
+
+### Ejercicio 4: Verificación
+
 Una vez completados los ejercicios, verifica que:
 
- Al abrir la página, se muestran los contactos existentes en la tabla
- Al llenar el formulario y dar clic en "Agregar Contacto", el nuevo contacto aparece en la tabla
- Al dar clic en "Eliminar", el contacto desaparece de la tabla
- Revisa db.json para confirmar que los datos se guardaron/eliminaron correctamente
-Conceptos Clave
-Concepto	Descripción
-fetch(url)	Hace una petición HTTP GET a la URL
-fetch(url, { method: "POST", ... })	Hace una petición POST con datos
-fetch(url, { method: "DELETE" })	Hace una petición DELETE para eliminar un recurso
-.then()	Se ejecuta cuando la Promesa se resuelve (cuando llega la respuesta)
-response.json()	Convierte la respuesta HTTP a un objeto JavaScript
-JSON.stringify(obj)	Convierte un objeto JavaScript a texto JSON para enviar al servidor
-Content-Type: application/json	Header que indica al servidor que los datos enviados son JSON
-CORS	Mecanismo que permite al navegador hacer peticiones a un servidor en otro origen
-Reto Extra (Opcional)
-Si terminaste los ejercicios, intenta implementar:
+- [ ] Al abrir la página, se muestran los contactos existentes en la tabla
+- [ ] Al llenar el formulario y dar clic en "Agregar Contacto", el nuevo contacto aparece en la tabla
+- [ ] Al dar clic en "Eliminar", el contacto desaparece de la tabla
+- [ ] Revisa `db.json` para confirmar que los datos se guardaron/eliminaron correctamente
 
-Un botón "Refrescar" que llame a mostrarContactos() al hacer clic
-Validación: que no se envíe el formulario si los campos están vacíos
-Un mensaje de confirmación con alert() después de agregar un contacto exitosamente
-Un confirm() antes de eliminar para que el usuario confirme la acción
+---
+
+## Conceptos Clave
+
+| Concepto | Descripción |
+|---|---|
+| `fetch(url)` | Hace una petición HTTP GET a la URL |
+| `fetch(url, { method: "POST", ... })` | Hace una petición POST con datos |
+| `fetch(url, { method: "DELETE" })` | Hace una petición DELETE para eliminar un recurso |
+| `.then()` | Se ejecuta cuando la Promesa se resuelve (cuando llega la respuesta) |
+| `response.json()` | Convierte la respuesta HTTP a un objeto JavaScript |
+| `JSON.stringify(obj)` | Convierte un objeto JavaScript a texto JSON para enviar al servidor |
+| `Content-Type: application/json` | Header que indica al servidor que los datos enviados son JSON |
+| CORS | Mecanismo que permite al navegador hacer peticiones a un servidor en otro origen |
+
+---
+
+## Reto Extra (Opcional)
+
+Si terminaste los ejercicios, intenta implementar:
+1. Un botón "Refrescar" que llame a `mostrarContactos()` al hacer clic
+2. Validación: que no se envíe el formulario si los campos están vacíos
+3. Un mensaje de confirmación con `alert()` después de agregar un contacto exitosamente
+4. Un `confirm()` antes de eliminar para que el usuario confirme la acción
